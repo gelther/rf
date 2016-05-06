@@ -19,7 +19,6 @@ add_filter( 'woocommerce_email_classes', 'receiptful_wcs_remove_email', 90 );
  * @since 1.0.0
  */
 function receiptful_wcs_remove_email( $emails ) {
-
 	// Don't unset when the email doesn't exist
 	if ( ! isset( $emails['WCS_Email_Completed_Renewal_Order'] ) || ! isset( $emails['WCS_Email_Processing_Renewal_Order'] ) ) {
 		return $emails;
@@ -40,7 +39,6 @@ function receiptful_wcs_remove_email( $emails ) {
 	unset( $emails['WCS_Email_Processing_Renewal_Order'] );
 
 	return $emails;
-
 }
 
 
@@ -48,19 +46,17 @@ add_filter( 'woocommerce_subscriptions_renewal_order_meta_query', 'receiptful_wc
 /**
  * Do not copy receiptful meta data for WC Subscription renewals
  *
- * @param $order_meta_query
- * @param $original_order_id
- * @param $renewal_order_id
- * @param $new_order_role
+ * @param         $order_meta_query
+ * @param         $original_order_id
+ * @param         $renewal_order_id
+ * @param         $new_order_role
  *
  * @return string
  */
 function receiptful_wcs_do_not_copy_meta_data( $order_meta_query, $original_order_id, $renewal_order_id, $new_order_role ) {
-
 	$order_meta_query .= " AND `meta_key` NOT IN ('_receiptful_receipt_id', '_receiptful_web_link')";
 
 	return $order_meta_query;
-
 }
 
 
@@ -73,11 +69,10 @@ add_filter( 'receiptful_hidden_order_itemmeta', 'receiptful_wcs_hide_subscriptio
  *
  * @since 1.1.0
  *
- * @param	array $existing_meta	List of existing meta being excluded.
- * @return	array					List of modified meta being excluded, this includes subscription meta.
+ * @param  array $existing_meta List of existing meta being excluded.
+ * @return array                List of modified meta being excluded, this includes subscription meta.
  */
 function receiptful_wcs_hide_subscription_meta_from_mail( $existing_meta ) {
-
 	$meta = array(
 		'_subscription_period',
 		'_subscription_interval',
@@ -93,5 +88,4 @@ function receiptful_wcs_hide_subscription_meta_from_mail( $existing_meta ) {
 	);
 
 	return array_merge( $existing_meta, $meta );
-
 }
