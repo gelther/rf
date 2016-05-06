@@ -65,7 +65,6 @@ class Receiptful_WooCommerce {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-
 		// Check if WooCommerce is active
 		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
 			require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
@@ -87,9 +86,7 @@ class Receiptful_WooCommerce {
 		$this->load_textdomain();
 
 		do_action( 'receiptful_loaded' );
-
 	}
-
 
 	/**
 	 * Instance.
@@ -102,15 +99,12 @@ class Receiptful_WooCommerce {
 	 * @return Receiptful_WooCommerce Instance of the class.
 	 */
 	public static function instance() {
-
 		if ( is_null( self::$instance ) ) {
 			self::$instance = new self();
 		}
 
 		return self::$instance;
-
 	}
-
 
 	/**
 	 * init.
@@ -120,7 +114,6 @@ class Receiptful_WooCommerce {
 	 * @since 1.0.0
 	 */
 	public function init() {
-
 		if ( is_admin() ) {
 
 			/**
@@ -181,9 +174,7 @@ class Receiptful_WooCommerce {
 		require_once plugin_dir_path( __FILE__ ) . '/includes/integrations/woocommerce-subscriptions.php';
 		require_once plugin_dir_path( __FILE__ ) . '/includes/integrations/wpml.php';
 		require_once plugin_dir_path( __FILE__ ) . '/includes/integrations/sensei.php';
-
 	}
-
 
 	/**
 	 * Hooks.
@@ -193,7 +184,6 @@ class Receiptful_WooCommerce {
 	 * @since 1.1.1
 	 */
 	public function hooks() {
-
 		// Plugin updates
 		add_action( 'admin_init', array( $this, 'check_version' ), 2 );
 
@@ -202,9 +192,7 @@ class Receiptful_WooCommerce {
 
 		// Helper functions
 		add_action( 'plugins_loaded', array( $this, 'load_helper_functions' ) );
-
 	}
-
 
 	/**
 	 * Textdomain.
@@ -214,15 +202,12 @@ class Receiptful_WooCommerce {
 	 * @since 1.1.1
 	 */
 	public function load_textdomain() {
-
 		$locale = apply_filters( 'plugin_locale', get_locale(), 'receiptful-for-woocommerce' );
 
 		// Load textdomain
 		load_textdomain( 'receiptful-for-woocommerce', WP_LANG_DIR . '/receiptful-for-woocommerce/receiptful-for-woocommerce-' . $locale . '.mo' );
 		load_plugin_textdomain( 'receiptful-for-woocommerce', false, basename( dirname( __FILE__ ) ) . '/languages' );
-
 	}
-
 
 	/**
 	 * Enqueue script.
@@ -232,16 +217,13 @@ class Receiptful_WooCommerce {
 	 * @since 1.0.2
 	 */
 	public function enqueue_scripts() {
-
 		// Add tracking script
 		wp_enqueue_script( 'receiptful-tracking', 'https://media.receiptful.com/scripts/tracking.js', array(), $this->version, false );
 
 		if ( isset( $_GET['redeem'] ) ) :
 			wp_enqueue_script( 'receiptful-redeem', 'https://media.receiptful.com/scripts/refer/redeem.js', array(), $this->version, false );
 		endif;
-
 	}
-
 
 	/**
 	 * Print script.
@@ -254,7 +236,6 @@ class Receiptful_WooCommerce {
 	public function print_scripts() {
 		return _deprecated_function( __METHOD__, '1.1.8' );
 	}
-
 
 	/**
 	 * Track order.
@@ -270,7 +251,6 @@ class Receiptful_WooCommerce {
 		return _deprecated_function( __METHOD__, '1.1.6' );
 	}
 
-
 	/**
 	 * Check plugin version.
 	 *
@@ -280,7 +260,6 @@ class Receiptful_WooCommerce {
 	 * @since 1.1.9
 	 */
 	public function check_version() {
-
 		/**
 		 * Version specific plugin updates
 		 */
@@ -299,9 +278,7 @@ class Receiptful_WooCommerce {
 		if ( $this->version != get_option( 'receiptful_woocommerce_version' ) ) {
 			update_option( 'receiptful_woocommerce_version', $this->version );
 		}
-
 	}
-
 
 	/**
 	 * Helper functions,
@@ -311,7 +288,6 @@ class Receiptful_WooCommerce {
 	 * @since 1.0.4
 	 */
 	public function load_helper_functions() {
-
 		/**
 		 * Helper functions
 		 */
@@ -321,9 +297,7 @@ class Receiptful_WooCommerce {
 		 * Receiptful CRON events
 		 */
 		require_once plugin_dir_path( __FILE__ ) . '/includes/receiptful-cron-functions.php';
-
 	}
-
 
 }
 
@@ -344,7 +318,6 @@ if ( ! function_exists( 'Receiptful' ) ) {
 	function Receiptful() {
 		return Receiptful_WooCommerce::instance();
 	}
-
 }
 
 Receiptful();
