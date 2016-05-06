@@ -17,21 +17,18 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  * @since 1.0.0
  *
- * @param	array $schedules	List of current CRON schedules.
- * @return	array				List of modified CRON schedules.
+ * @param  array $schedules List of current CRON schedules.
+ * @return array            List of modified CRON schedules.
  */
 function receiptful_add_quarter_schedule( $schedules ) {
-
 	$schedules['quarter_hour'] = array(
-		'interval'	=> 60 * 15, // 60 seconds * 15 minutes
-		'display'	=> __( 'Every quarter', 'receiptful-for-woocommerce' ),
+		'interval' => 60 * 15, // 60 seconds * 15 minutes
+		'display'  => __( 'Every quarter', 'receiptful-for-woocommerce' ),
 	);
 
 	return $schedules;
-
 }
 add_filter( 'cron_schedules', 'receiptful_add_quarter_schedule' );
-
 
 /**
  * Schedule events.
@@ -43,7 +40,6 @@ add_filter( 'cron_schedules', 'receiptful_add_quarter_schedule' );
  * @since 1.0.0
  */
 function receiptful_schedule_event() {
-
 	// Resend queue
 	if ( ! wp_next_scheduled( 'receiptful_check_resend' ) ) {
 		wp_schedule_event( 1407110400, 'quarter_hour', 'receiptful_check_resend' ); // 1407110400 is 08 / 4 / 2014 @ 0:0:0 UTC
@@ -63,10 +59,8 @@ function receiptful_schedule_event() {
 	} elseif ( wp_next_scheduled( 'receiptful_initial_receipt_sync' ) && 1 == get_option( 'receiptful_completed_initial_receipt_sync', 0 ) ) {
 		wp_clear_scheduled_hook( 'receiptful_initial_receipt_sync' ); // Remove CRON when we're done with it.
 	}
-
 }
 add_action( 'init', 'receiptful_schedule_event' );
-
 
 /**
  * Resend queue.
@@ -77,7 +71,6 @@ add_action( 'init', 'receiptful_schedule_event' );
  * @since 1.0.0
  */
 function receiptful_check_resend() {
-
 	// Receipt queue
 	Receiptful()->email->resend_queue();
 
@@ -86,10 +79,8 @@ function receiptful_check_resend() {
 
 	// Orders queue
 	Receiptful()->order->process_queue();
-
 }
 add_action( 'receiptful_check_resend', 'receiptful_check_resend' );
-
 
 /**
  * Sync data.
@@ -101,31 +92,30 @@ add_action( 'receiptful_check_resend', 'receiptful_check_resend' );
  * @since 1.1.1
  */
 function receiptful_initial_product_sync() {
-
 	$product_ids = get_posts( array(
-		'fields'			=> 'ids',
-		'posts_per_page'	=> '225',
-		'post_type'			=> 'product',
-		'has_password'		=> false,
-		'post_status'		=> 'publish',
-		'meta_query'		=> array(
-			'relation' 		=> 'OR',
+		'fields'         => 'ids',
+		'posts_per_page' => '225',
+		'post_type'      => 'product',
+		'has_password'   => false,
+		'post_status'    => 'publish',
+		'meta_query'     => array(
+			'relation' => 'OR',
 			// @since 1.2.5 - This is for a re-sync that should be initialised
 			array(
-				'key'		=> '_receiptful_last_update',
-				'compare'	=> '<',
-				'value'		=> strtotime( '2016-05-06' ),
+				'key'     => '_receiptful_last_update',
+				'compare' => '<',
+				'value'   => strtotime( '2016-05-06' ),
 			),
 			array(
 				array(
-					'key'		=> '_receiptful_last_update',
-					'compare'	=> 'NOT EXISTS',
-					'value'		=> '',
+					'key'     => '_receiptful_last_update',
+					'compare' => 'NOT EXISTS',
+					'value'   => '',
 				),
 				array(
-					'key'		=> '_visibility',
-					'compare'	=> '!=',
-					'value'		=> 'hidden',
+					'key'     => '_visibility',
+					'compare' => '!=',
+					'value'   => 'hidden',
 				),
 			),
 		),
@@ -161,7 +151,7 @@ function receiptful_initial_product_sync() {
 	} elseif ( in_array( $response['response']['code'], array( '200', '202' ) ) ) { // Update only the ones without error - retry the ones with error
 
 		$failed_ids = array();
-		$body 		= json_decode( $response['body'], 1 );
+		$body       = json_decode( $response['body'], 1 );
 		foreach ( $body['errors'] as $error ) {
 			$failed_ids[] = isset( $error['error']['product_id'] ) ? $error['error']['product_id'] : null;
 		}
@@ -177,10 +167,8 @@ function receiptful_initial_product_sync() {
 
 	} elseif ( in_array( $response['response']['code'], array( '401', '500', '503' ) ) ) { // Retry later - keep meta unset
 	}
-
 }
 add_action( 'receiptful_initial_product_sync', 'receiptful_initial_product_sync' );
-
 
 /**
  * Sync Receipt data.
@@ -192,24 +180,23 @@ add_action( 'receiptful_initial_product_sync', 'receiptful_initial_product_sync'
  * @since 1.1.2
  */
 function receiptful_initial_receipt_sync() {
-
 	$receipt_ids = get_posts( array(
-		'fields'			=> 'ids',
-		'posts_per_page'	=> '225',
-		'post_type'			=> 'shop_order',
-		'post_status'		=> array_keys( wc_get_order_statuses() ),
-		'meta_query'		=> array(
+		'fields'         => 'ids',
+		'posts_per_page' => '225',
+		'post_type'      => 'shop_order',
+		'post_status'    => array_keys( wc_get_order_statuses() ),
+		'meta_query'     => array(
 			'relation' => 'OR',
 			array(
-				'key'		=> '_receiptful_last_update',
-				'compare'	=> 'NOT EXISTS',
-				'value'		=> '',
+				'key'     => '_receiptful_last_update',
+				'compare' => 'NOT EXISTS',
+				'value'   => '',
 			),
 			// @since 1.1.9 - This is for a re-sync that should be initialised
 			array(
-				'key'		=> '_receiptful_last_update',
-				'compare'	=> '<',
-				'value'		=> strtotime( '2015-07-15' ),
+				'key'     => '_receiptful_last_update',
+				'compare' => '<',
+				'value'   => strtotime( '2015-07-15' ),
 			),
 		),
 	) );
@@ -224,10 +211,10 @@ function receiptful_initial_receipt_sync() {
 	$args = array();
 	foreach ( $receipt_ids as $receipt_id ) {
 
-		$order		= wc_get_order( $receipt_id );
-		$items 		= WC()->mailer->emails['WC_Email_Customer_Completed_Order']->api_args_get_items( $order );
-		$subtotals 	= WC()->mailer->emails['WC_Email_Customer_Completed_Order']->api_args_get_subtotals( $order );
-		$order_args	= WC()->mailer->emails['WC_Email_Customer_Completed_Order']->api_args_get_order_args( $order, $items, $subtotals, $related_products = array() );
+		$order                = wc_get_order( $receipt_id );
+		$items                = WC()->mailer->emails['WC_Email_Customer_Completed_Order']->api_args_get_items( $order );
+		$subtotals            = WC()->mailer->emails['WC_Email_Customer_Completed_Order']->api_args_get_subtotals( $order );
+		$order_args           = WC()->mailer->emails['WC_Email_Customer_Completed_Order']->api_args_get_order_args( $order, $items, $subtotals, $related_products = array() );
 		$order_args['status'] = $order->get_status();
 
 		$args[] = $order_args;
@@ -252,7 +239,7 @@ function receiptful_initial_receipt_sync() {
 	} elseif ( in_array( $response['response']['code'], array( '200', '202' ) ) ) { // Update only the ones without error - retry the ones with error
 
 		$failed_ids = array();
-		$body 		= json_decode( $response['body'], 1 );
+		$body       = json_decode( $response['body'], 1 );
 		foreach ( $body['errors'] as $error ) {
 			$failed_ids[] = isset( $error['error']['reference'] ) ? $error['error']['reference'] : null;
 		}
@@ -268,6 +255,5 @@ function receiptful_initial_receipt_sync() {
 
 	} elseif ( in_array( $response['response']['code'], array( '401', '500', '503' ) ) ) { // Retry later - keep meta unset
 	}
-
 }
 add_action( 'receiptful_initial_receipt_sync', 'receiptful_initial_receipt_sync' );
