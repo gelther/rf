@@ -20,7 +20,6 @@ class Receiptful_Abandoned_Cart {
 	 * @since 1.2.0
 	 */
 	public function __construct() {
-
 		// Add to cart
 		add_action( 'woocommerce_add_to_cart', array( $this, 'cart_update' ), 10 );
 
@@ -40,9 +39,7 @@ class Receiptful_Abandoned_Cart {
 
 		// Delete abandoned cart
 		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'delete_abandoned_cart' ) );
-
 	}
-
 
 	/**
 	 * Cart update.
@@ -52,7 +49,6 @@ class Receiptful_Abandoned_Cart {
 	 * @since 1.2.0
 	 */
 	public function cart_update() {
-
 		if ( ! isset( $_COOKIE['receiptful-token'] ) ) {
 			return false;
 		}
@@ -65,16 +61,14 @@ class Receiptful_Abandoned_Cart {
 		);
 
 		if ( is_user_logged_in() ) {
-			$current_user = wp_get_current_user();
+			$current_user          = wp_get_current_user();
 			$cart_args['customer'] = $current_user->user_email;
 		}
 
 		$response = Receiptful()->api->post_cart_update( $cart_args );
 
 		return $response;
-
 	}
-
 
 	/**
 	 * Prepare cart items.
@@ -83,11 +77,10 @@ class Receiptful_Abandoned_Cart {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param	array		$cart_items	List of cart items.
-	 * @return	array|bool				False when no cart items. Formatted cart item list otherwise.
+	 * @param  array      $cart_items List of cart items.
+	 * @return array|bool             False when no cart items. Formatted cart item list otherwise.
 	 */
 	public function prep_cart_items( $cart_items ) {
-
 		if ( ! is_array( $cart_items ) ) {
 			return false;
 		}
@@ -117,9 +110,7 @@ class Receiptful_Abandoned_Cart {
 		}
 
 		return $cart_items_args;
-
 	}
-
 
 	/**
 	 * Get cart item attributes.
@@ -128,11 +119,10 @@ class Receiptful_Abandoned_Cart {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param	array	$cart_item	List of cart item data.
-	 * @return	array				List of cart item variable attributes.
+	 * @param  array $cart_item List of cart item data.
+	 * @return array            List of cart item variable attributes.
 	 */
 	public function prep_cart_item_attributes( $cart_item ) {
-
 		if ( ! isset( $cart_item['variation'] ) ) {
 			return null;
 		}
@@ -148,9 +138,7 @@ class Receiptful_Abandoned_Cart {
 		}
 
 		return $attributes;
-
 	}
-
 
 	/**
 	 * Recover the cart items.
@@ -162,7 +150,6 @@ class Receiptful_Abandoned_Cart {
 	 * @return bool false when the ID is not recognized.
 	 */
 	public function recover_cart() {
-
 		$token = isset( $_GET['rfcart'] ) ? $_GET['rfcart'] : null;
 
 		$response = Receiptful()->api->get_abandoned_cart( $token );
@@ -182,10 +169,10 @@ class Receiptful_Abandoned_Cart {
 					continue;
 				}
 
-				$product_id		= $values['reference'];
-				$quantity		= isset( $values['quantity'] ) ? $values['quantity'] : '1';
-				$variation_id	= isset( $values['variant'] )  ? $values['variant']  : '';
-				$var			= '';
+				$product_id   = $values['reference'];
+				$quantity     = isset( $values['quantity'] ) ? $values['quantity'] : '1';
+				$variation_id = isset( $values['variant'] )  ? $values['variant']  : '';
+				$var          = '';
 
 				if ( empty( $var ) && ! empty( $values['attributes'] ) ) {
 					foreach ( $values['attributes'] as $key => $value ) {
@@ -203,10 +190,7 @@ class Receiptful_Abandoned_Cart {
 			wp_redirect( add_query_arg( 'receiptful', $_GET['receiptful'], WC()->cart->get_cart_url() ) );
 			die;
 		}
-
-
 	}
-
 
 	/**
 	 * Delete abandoned cart.
@@ -218,13 +202,11 @@ class Receiptful_Abandoned_Cart {
 	 * @param int $order_id ID of the order being created.
 	 */
 	public function delete_abandoned_cart( $order_id ) {
-
 		$token = get_post_meta( $order_id, '_receiptful_token', true );
 
 		if ( ! empty( $token ) ) {
 			Receiptful()->api->delete_abandoned_cart( $token );
 		}
-
 	}
 
 }
