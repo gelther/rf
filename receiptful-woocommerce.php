@@ -90,7 +90,6 @@ class Receiptful_WooCommerce {
 
 	}
 
-
 	/**
 	 * Instance.
 	 *
@@ -110,7 +109,6 @@ class Receiptful_WooCommerce {
 		return self::$instance;
 
 	}
-
 
 	/**
 	 * init.
@@ -184,7 +182,6 @@ class Receiptful_WooCommerce {
 
 	}
 
-
 	/**
 	 * Hooks.
 	 *
@@ -205,7 +202,6 @@ class Receiptful_WooCommerce {
 
 	}
 
-
 	/**
 	 * Textdomain.
 	 *
@@ -222,7 +218,6 @@ class Receiptful_WooCommerce {
 		load_plugin_textdomain( 'receiptful-for-woocommerce', false, basename( dirname( __FILE__ ) ) . '/languages' );
 
 	}
-
 
 	/**
 	 * Enqueue script.
@@ -242,7 +237,6 @@ class Receiptful_WooCommerce {
 
 	}
 
-
 	/**
 	 * Print script.
 	 *
@@ -252,9 +246,10 @@ class Receiptful_WooCommerce {
 	 * @deprecated 1.1.8 Automatically set in receiptful.init().
 	 */
 	public function print_scripts() {
-		return _deprecated_function( __METHOD__, '1.1.8' );
-	}
 
+		return _deprecated_function( __METHOD__, '1.1.8' );
+
+	}
 
 	/**
 	 * Track order.
@@ -267,9 +262,10 @@ class Receiptful_WooCommerce {
 	 * @param int $order_id ID of the order being completed.
 	 */
 	public function thank_you_tracking( $order_id ) {
-		return _deprecated_function( __METHOD__, '1.1.6' );
-	}
 
+		return _deprecated_function( __METHOD__, '1.1.6' );
+
+	}
 
 	/**
 	 * Check plugin version.
@@ -302,7 +298,6 @@ class Receiptful_WooCommerce {
 
 	}
 
-
 	/**
 	 * Helper functions,
 	 *
@@ -324,7 +319,6 @@ class Receiptful_WooCommerce {
 
 	}
 
-
 }
 
 
@@ -342,6 +336,7 @@ class Receiptful_WooCommerce {
 if ( ! function_exists( 'Receiptful' ) ) {
 
 	function Receiptful() {
+
 		return Receiptful_WooCommerce::instance();
 	}
 
