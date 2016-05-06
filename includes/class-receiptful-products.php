@@ -22,7 +22,6 @@ class Receiptful_Products {
 	 * @since 1.1.1
 	 */
 	public function __construct() {
-
 		// Create/Update product
 		add_action( 'publish_post', array( $this, 'update_product' ), 20 );
 		add_action( 'save_post', array( $this, 'update_product' ), 20 );
@@ -32,9 +31,7 @@ class Receiptful_Products {
 
 		// Update product on sale price start/expire
 		add_action( 'woocommerce_scheduled_sales', array( $this, 'update_product_sale_change' ), 9 );
-
 	}
-
 
 	/**
 	 * Update product.
@@ -44,31 +41,28 @@ class Receiptful_Products {
 	 *
 	 * @since 1.1.1
 	 *
-	 * @param 	int 			$post_id 	ID of the post currently being saved.
-	 * @return	array|WP_Error				Returns the API response, or WP_Error when API call fails.
+	 * @param  int            $post_id ID of the post currently being saved.
+	 * @return array|WP_Error          Returns the API response, or WP_Error when API call fails.
 	 */
 	public function update_product( $post_id ) {
-
 		// Bail if its not a product / if its trashed
 		if ( 'product' !== get_post_type( $post_id ) || 'trash' == get_post_status( $post_id ) ) {
 			return;
 		}
 
-		$args 		= $this->get_formatted_product( $post_id );
-		$response 	= Receiptful()->api->update_product( $post_id, $args );
+		$args     = $this->get_formatted_product( $post_id );
+		$response = Receiptful()->api->update_product( $post_id, $args );
 
 		if ( is_wp_error( $response ) || in_array( $response['response']['code'], array( '401', '500', '503' ) ) ) {
-			$queue 							= get_option( '_receiptful_queue', array() );
-			$queue['products'][ $post_id ] 	= array( 'id' => $post_id, 'action' => 'update' );
+			$queue                         = get_option( '_receiptful_queue', array() );
+			$queue['products'][ $post_id ] = array( 'id' => $post_id, 'action' => 'update' );
 			update_option( '_receiptful_queue', $queue );
 		} elseif ( in_array( $response['response']['code'], array( '200' ) ) ) {
 			update_post_meta( $post_id, '_receiptful_last_update', time() );
 		}
 
 		return $response;
-
 	}
-
 
 	/**
 	 * Update products.
@@ -78,11 +72,10 @@ class Receiptful_Products {
 	 *
 	 * @since 1.1.1
 	 *
-	 * @param 	array 			$product_ids 	List of product IDs to sync with Receiptful.
-	 * @return	array|WP_Error					Returns the API response, or WP_Error when API call fails.
+	 * @param  array          $product_ids List of product IDs to sync with Receiptful.
+	 * @return array|WP_Error              Returns the API response, or WP_Error when API call fails.
 	 */
 	public function update_products( $product_ids = array() ) {
-
 		// Prepare product args
 		$args = array();
 		foreach ( $product_ids as $product_id ) {
@@ -104,7 +97,7 @@ class Receiptful_Products {
 		} elseif ( in_array( $response['response']['code'], array( '200', '202' ) ) ) {
 
 			$failed_ids = array();
-			$body 		= json_decode( $response['body'], 1 );
+			$body       = json_decode( $response['body'], 1 );
 			foreach ( $body['errors'] as $error ) {
 				$failed_ids[] = isset( $error['error']['product_id'] ) ? $error['error']['product_id'] : null;
 			}
@@ -118,9 +111,7 @@ class Receiptful_Products {
 		}
 
 		return $response;
-
 	}
-
 
 	/**
 	 * Formatted product.
@@ -130,11 +121,10 @@ class Receiptful_Products {
 	 *
 	 * @since 1.1.1
 	 *
-	 * @param	int		$product_id	ID of the product to update.
-	 * @return	array				Formatted array according Receiptful standards with product data.
+	 * @param  int   $product_id ID of the product to update.
+	 * @return array             Formatted array according Receiptful standards with product data.
 	 */
 	public function get_formatted_product( $product_id ) {
-
 		// Bail if the ID is not a product ID
 		if ( 'product' != get_post_type( $product_id ) ) {
 			return;
@@ -145,11 +135,11 @@ class Receiptful_Products {
 			return;
 		}
 
-		$product 	= wc_get_product( $product_id );
-		$images 	= $this->get_formatted_images( $product->id );
-		$categories	= $this->get_formatted_categories( $product->id );
-		$tags		= wp_get_post_terms( $product->id, 'product_tag', array( 'fields' => 'names' ) );
-		$variants	= $this->get_formatted_variants( $product->id );
+		$product    = wc_get_product( $product_id );
+		$images     = $this->get_formatted_images( $product->id );
+		$categories = $this->get_formatted_categories( $product->id );
+		$tags       = wp_get_post_terms( $product->id, 'product_tag', array( 'fields' => 'names' ) );
+		$variants   = $this->get_formatted_variants( $product->id );
 
 		if ( 'publish' != $product->post->post_status ) :
 			$hidden = true;
@@ -164,21 +154,19 @@ class Receiptful_Products {
 		endif;
 
 		$args = apply_filters( 'receiptful_update_product_args', array(
-			'product_id'	=> (string) $product->id,
-			'title'			=> $product->get_title(),
-			'description'	=> strip_shortcodes( $product->post->post_content ),
-			'hidden'		=> $hidden,
-			'url'			=> get_permalink( $product->id ),
-			'images'		=> $images,
-			'tags'			=> $tags,
-			'categories'	=> $categories,
-			'variants'		=> $variants,
+			'product_id'  => (string) $product->id,
+			'title'       => $product->get_title(),
+			'description' => strip_shortcodes( $product->post->post_content ),
+			'hidden'      => $hidden,
+			'url'         => get_permalink( $product->id ),
+			'images'      => $images,
+			'tags'        => $tags,
+			'categories'  => $categories,
+			'variants'    => $variants,
 		), $product->id );
 
 		return $args;
-
 	}
-
 
 	/**
 	 * Formatted categories.
@@ -188,29 +176,26 @@ class Receiptful_Products {
 	 *
 	 * @since 1.1.1
 	 *
-	 * @param 	int 	$product_id 	ID of the product currently processing.
-	 * @return 	array					List of product categories formatted according Receiptful specs.
+	 * @param  int   $product_id ID of the product currently processing.
+	 * @return array             List of product categories formatted according Receiptful specs.
 	 */
 	public function get_formatted_categories( $product_id ) {
-
-		$categories 	= array();
-		$product_cats	= wp_get_post_terms( $product_id, 'product_cat' );
+		$categories   = array();
+		$product_cats = wp_get_post_terms( $product_id, 'product_cat' );
 
 		if ( $product_cats ) {
 			foreach ( $product_cats as $category ) {
 				$categories[] = array(
-					'category_id'	=> (string) $category->term_id,
-					'title'			=> $category->name,
-					'description'	=> $category->description,
-					'url'			=> get_term_link( $category->term_id, 'product_cat' ),
+					'category_id' => (string) $category->term_id,
+					'title'       => $category->name,
+					'description' => $category->description,
+					'url'         => get_term_link( $category->term_id, 'product_cat' ),
 				);
 			}
 		}
 
 		return $categories;
-
 	}
-
 
 	/**
 	 * Formatted images.
@@ -222,21 +207,20 @@ class Receiptful_Products {
 	 *
 	 * @since 1.1.1
 	 *
-	 * @param 	int 	$product_id 	ID of the product currently processing.
-	 * @return 	array					List of product images formatted according Receiptful specs.
+	 * @param  int   $product_id ID of the product currently processing.
+	 * @return array             List of product images formatted according Receiptful specs.
 	 */
 	public function get_formatted_images( $product_id ) {
-
-		$images 		= array();
-		$product 		= wc_get_product( $product_id );
-		$featured_id	= $product->get_image_id();
-		$image_ids 		= $product->get_gallery_attachment_ids();
+		$images      = array();
+		$product     = wc_get_product( $product_id );
+		$featured_id = $product->get_image_id();
+		$image_ids   = $product->get_gallery_attachment_ids();
 
 		// Featured image
 		if ( ! empty( $featured_id ) && 0 !== $featured_id && wp_get_attachment_url( $featured_id ) ) {
 			$images[] = array(
-				'position' 	=> count( $images ),
-				'url'		=> wp_get_attachment_url( $featured_id ),
+				'position' => count( $images ),
+				'url'      => wp_get_attachment_url( $featured_id ),
 			);
 		}
 
@@ -246,8 +230,8 @@ class Receiptful_Products {
 
 				if ( wp_get_attachment_url( $image_id ) ) {
 					$images[] = array(
-						'position' 	=> count( $images ),
-						'url'		=> wp_get_attachment_url( $image_id ),
+						'position' => count( $images ),
+						'url'      => wp_get_attachment_url( $image_id ),
 					);
 				}
 
@@ -255,9 +239,7 @@ class Receiptful_Products {
 		}
 
 		return $images;
-
 	}
-
 
 	/**
 	 * Formatted variants.
@@ -267,13 +249,12 @@ class Receiptful_Products {
 	 *
 	 * @since 1.1.1
 	 *
-	 * @param 	int 	$product_id 	ID of the product currently processing.
-	 * @return 	array					List of product prices formatted according Receiptful specs.
+	 * @param  int   $product_id ID of the product currently processing.
+	 * @return array             List of product prices formatted according Receiptful specs.
 	 */
-	public function get_formatted_variants( $product_id )  {
-
-		$variants 	= array();
-		$product	= wc_get_product( $product_id );
+	public function get_formatted_variants( $product_id ) {
+		$variants = array();
+		$product  = wc_get_product( $product_id );
 
 		if ( 'variable' == $product->product_type ) {
 
@@ -284,21 +265,19 @@ class Receiptful_Products {
 				}
 
 				$variants[] = array(
-					'price'	=> (float) number_format( (float) $variation['display_price'], 2, '.', '' ),
+					'price' => (float) number_format( (float) $variation['display_price'], 2, '.', '' ),
 				);
 
 			}
 
 		} elseif ( null != $product->get_price() ) {
 			$variants[] = array(
-				'price'	=> (float) number_format( (float) $product->get_price(), 2, '.', '' ),
+				'price' => (float) number_format( (float) $product->get_price(), 2, '.', '' ),
 			);
 		}
 
 		return $variants;
-
 	}
-
 
 	/**
 	 * Delete product.
@@ -307,12 +286,11 @@ class Receiptful_Products {
 	 *
 	 * @since 1.1.1
 	 *
-	 * @param 	int 			$post_id 	ID of the post (product) currently being deleted.
-	 * @param 	WP_Post			$post 		WP_Post object containing post data.
-	 * @return	array|WP_Error				Returns the API response, or WP_Error when API call fails.
+	 * @param  int            $post_id ID of the post (product) currently being deleted.
+	 * @param  WP_Post        $post    WP_Post object containing post data.
+	 * @return array|WP_Error          Returns the API response, or WP_Error when API call fails.
 	 */
 	public function delete_product( $post_id, $post = '' ) {
-
 		// Bail if its not a product
 		if ( 'product' !== get_post_type( $post_id ) ) {
 			return;
@@ -321,15 +299,13 @@ class Receiptful_Products {
 		$response = Receiptful()->api->delete_product( $post_id );
 
 		if ( is_wp_error( $response ) || in_array( $response['response']['code'], array( '401', '500', '503' ) ) ) {
-			$queue 							= get_option( '_receiptful_queue', array() );
-			$queue['products'][ $post_id ] 	= array( 'id' => $post_id, 'action' => 'delete' );
+			$queue                         = get_option( '_receiptful_queue', array() );
+			$queue['products'][ $post_id ] = array( 'id' => $post_id, 'action' => 'delete' );
 			update_option( '_receiptful_queue', $queue );
 		}
 
 		return $response;
-
 	}
-
 
 	/**
 	 * Processes product queue.
@@ -340,7 +316,6 @@ class Receiptful_Products {
 	 * @since 1.1.12 - Limit queue processing up to 225 products per batch
 	 */
 	public function process_queue() {
-
 		$queue = get_option( '_receiptful_queue', array() );
 
 		// Process products
@@ -361,9 +336,7 @@ class Receiptful_Products {
 		}
 
 		update_option( '_receiptful_queue', $queue );
-
 	}
-
 
 	/**
 	 * Update on sale change.
@@ -374,7 +347,6 @@ class Receiptful_Products {
 	 * @since 1.1.11
 	 */
 	public function update_product_sale_change() {
-
 		global $wpdb;
 
 		// Sales which are due to start
@@ -419,8 +391,6 @@ class Receiptful_Products {
 				$this->update_product( $product_id );
 			}
 		}
-
 	}
-
 
 }
