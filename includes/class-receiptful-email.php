@@ -19,11 +19,8 @@ class Receiptful_Email {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-
 		$this->hooks();
-
 	}
-
 
 	/**
 	 * Class hooks.
@@ -31,7 +28,6 @@ class Receiptful_Email {
 	 * @since 1.0.0
 	 */
 	public function hooks() {
-
 		// Remove standard emails
 		add_filter( 'woocommerce_email_classes', array( $this, 'update_woocommerce_email' ), 90 );
 
@@ -51,10 +47,8 @@ class Receiptful_Email {
 		add_action( 'woocommerce_order_actions', array( $this, 'receiptful_order_actions' ) );
 
 		// Order Action callback
-		add_action( 'woocommerce_order_action_receiptful_send_receipt', array( $this, 'send_transactional_email' ), 60);
-
+		add_action( 'woocommerce_order_action_receiptful_send_receipt', array( $this, 'send_transactional_email' ), 60 );
 	}
-
 
 	/**
 	 * WC Emails.
@@ -64,11 +58,10 @@ class Receiptful_Email {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param	array $emails	List of existing/registered WC emails.
-	 * @return	array			List of modified WC emails.
+	 * @param  array $emails List of existing/registered WC emails.
+	 * @return array         List of modified WC emails.
 	 */
 	public function update_woocommerce_email( $emails ) {
-
 		// Remove triggers
 		remove_action( 'woocommerce_order_status_completed_notification', array( $emails['WC_Email_Customer_Completed_Order'], 'trigger' ) );
 		remove_action( 'woocommerce_order_status_pending_to_processing_notification', array( $emails['WC_Email_Customer_Processing_Order'], 'trigger' ) );
@@ -84,9 +77,7 @@ class Receiptful_Email {
 		$emails['WC_Email_Customer_Completed_Order'] = include plugin_dir_path( __FILE__ ) . 'emails/class-receiptful-email-customer-new-order.php';
 
 		return $emails;
-
 	}
-
 
 	/**
 	 * Send mail.
@@ -96,13 +87,10 @@ class Receiptful_Email {
 	 * @since 1.0.0
 	 */
 	public function send_transactional_email() {
-
 		WC()->mailer();
 		$args = func_get_args();
 		do_action_ref_array( 'receiptful_order_status_processing_notification', $args );
-
 	}
-
 
 	/**
 	 * Create coupon.
@@ -111,16 +99,15 @@ class Receiptful_Email {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param	array	$data		List of data returned by the Receiptful API.
-	 * @param	int		$order_id	ID of the order being processed.
-	 * @return  int     $id         ID of new coupon
+	 * @param  array $data     List of data returned by the Receiptful API.
+	 * @param  int   $order_id ID of the order being processed.
+	 * @return int   $id       ID of new coupon
 	 */
 	public function create_coupon( $data, $order_id ) {
-
-		$order				= wc_get_order( $order_id );
-		$coupon_code		= apply_filters( 'woocommerce_coupon_code', wc_clean( $data['couponCode'] ) );
-		$shipping_coupon	= 'no';
-		$discount_type		= 'fixed_cart';
+		$order           = wc_get_order( $order_id );
+		$coupon_code     = apply_filters( 'woocommerce_coupon_code', wc_clean( $data['couponCode'] ) );
+		$shipping_coupon = 'no';
+		$discount_type   = 'fixed_cart';
 
 		// Check for duplicate coupon codes
 		$coupon_found = wc_get_coupon_by_code( $coupon_code );
@@ -149,43 +136,43 @@ class Receiptful_Email {
 
 		} elseif ( 'shippingcoupon' == $data['upsellType'] ) {
 
-			$shipping_coupon 	= 'yes';
-			$data['amount']		= '';
+			$shipping_coupon = 'yes';
+			$data['amount']  = '';
 
 		}
 
 		$coupon_data = apply_filters( 'receiptful_coupon_data', array(
-			'discount_type'					=> $discount_type,
-			'coupon_amount'					=> wc_format_decimal( isset( $data['amount'] ) ? wc_clean( $data['amount'] ) : '' ),
-			'individual_use'				=> 'yes',
-			'product_ids'					=> '',
-			'exclude_product_ids'			=> '',
-			'usage_limit'					=> '1',
-			'usage_limit_per_user'			=> '1',
-			'limit_usage_to_x_items'		=> '',
-			'usage_count'					=> '0',
-			'expiry_date'					=> wc_clean( $expiry_date ),
-			'apply_before_tax'				=> 'yes',
-			'free_shipping'					=> wc_clean( $shipping_coupon ),
-			'product_categories'			=> array(),
-			'exclude_product_categories'	=> array(),
-			'exclude_sale_items'			=> 'no',
-			'minimum_amount'				=> '',
-			'maximum_amount'				=> '',
-			'customer_email'				=> ! empty( $data['emailLimit'] ) ? array( sanitize_email( $order->billing_email ) ) : array(),
-			'receiptful_coupon'				=> 'yes',
-			'receiptful_coupon_order'		=> $order_id,
+			'discount_type'              => $discount_type,
+			'coupon_amount'              => wc_format_decimal( isset( $data['amount'] ) ? wc_clean( $data['amount'] ) : '' ),
+			'individual_use'             => 'yes',
+			'product_ids'                => '',
+			'exclude_product_ids'        => '',
+			'usage_limit'                => '1',
+			'usage_limit_per_user'       => '1',
+			'limit_usage_to_x_items'     => '',
+			'usage_count'                => '0',
+			'expiry_date'                => wc_clean( $expiry_date ),
+			'apply_before_tax'           => 'yes',
+			'free_shipping'              => wc_clean( $shipping_coupon ),
+			'product_categories'         => array(),
+			'exclude_product_categories' => array(),
+			'exclude_sale_items'         => 'no',
+			'minimum_amount'             => '',
+			'maximum_amount'             => '',
+			'customer_email'             => ! empty( $data['emailLimit'] ) ? array( sanitize_email( $order->billing_email ) ) : array(),
+			'receiptful_coupon'          => 'yes',
+			'receiptful_coupon_order'    => $order_id,
 		), $order_id, $data );
 
 		$new_coupon = array(
-			'post_title'	=> $coupon_code,
-			'post_content'	=> '',
-			'post_status'	=> 'publish',
-			'post_author'	=> get_current_user_id(),
-			'post_type'		=> 'shop_coupon',
-			'post_excerpt'	=> isset( $data['title'] ) ? wc_clean( $data['title'] ) : '',
+			'post_title'   => $coupon_code,
+			'post_content' => '',
+			'post_status'  => 'publish',
+			'post_author'  => get_current_user_id(),
+			'post_type'    => 'shop_coupon',
+			'post_excerpt' => isset( $data['title'] ) ? wc_clean( $data['title'] ) : '',
 		);
-		$id = wp_insert_post( $new_coupon );
+		$id         = wp_insert_post( $new_coupon );
 
 		// set coupon meta
 		foreach ( $coupon_data as $key => $value ) {
@@ -193,9 +180,7 @@ class Receiptful_Email {
 		}
 
 		return $id;
-
 	}
-
 
 	/**
 	 * Online receipt.
@@ -204,29 +189,26 @@ class Receiptful_Email {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param	array		$actions	List of existing actions (buttons).
-	 * @param	WC_Order	$order		Order object of the current order line.
-	 * @return	array					List of modified actions (buttons).
+	 * @param  array    $actions List of existing actions (buttons).
+	 * @param  WC_Order $order   Order object of the current order line.
+	 * @return array             List of modified actions (buttons).
 	 */
 	public function view_receipt_button( $actions, $order ) {
+		$receipt_id          = get_post_meta( $order->id, '_receiptful_receipt_id', true );
+		$receiptful_web_link = get_post_meta( $order->id, '_receiptful_web_link', true );
 
-		$receipt_id				= get_post_meta( $order->id, '_receiptful_receipt_id', true );
-		$receiptful_web_link	= get_post_meta( $order->id, '_receiptful_web_link', true );
-
-		if ( $receipt_id && $receiptful_web_link ){
+		if ( $receipt_id && $receiptful_web_link ) {
 			// Id exists so remove old View button and add Receiptful button
 			unset( $actions['view'] );
 
 			$actions['receipt'] = array(
-				'url'	=> $receiptful_web_link['webview'],
-				'name'	=> __( 'View Receipt', 'receiptful-for-woocommerce' )
+				'url'  => $receiptful_web_link['webview'],
+				'name' => __( 'View Receipt', 'receiptful-for-woocommerce' )
 			);
 		}
 
 		return $actions;
-
 	}
-
 
 	/**
 	 * Resend queue.
@@ -236,7 +218,6 @@ class Receiptful_Email {
 	 * @since 1.0.0
 	 */
 	public static function resend_queue() {
-
 		// Check queue
 		$resend_queue = get_option( '_receiptful_resend_queue' );
 
@@ -245,8 +226,8 @@ class Receiptful_Email {
 			WC()->mailer();
 			foreach ( $resend_queue as $key => $order_id ) {
 
-				$receiptful_email 	= new Receiptful_Email_Customer_New_Order();
-				$response 			= $receiptful_email->trigger( $order_id );
+				$receiptful_email = new Receiptful_Email_Customer_New_Order();
+				$response         = $receiptful_email->trigger( $order_id );
 
 				if ( ! is_wp_error( $response ) && in_array( $response['response']['code'], array( '200', '201', '400' ) ) ) {
 					unset( $resend_queue[ $key ] );
@@ -257,9 +238,7 @@ class Receiptful_Email {
 			update_option( '_receiptful_resend_queue', $resend_queue );
 
 		}
-
 	}
-
 
 	/**
 	 * Order actions.
@@ -268,18 +247,15 @@ class Receiptful_Email {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param	array $actions	List of existing order actions.
-	 * @return	array			List of modified order actions.
+	 * @param  array $actions List of existing order actions.
+	 * @return array          List of modified order actions.
 	 */
 	public function receiptful_order_actions( $actions ) {
-
 		if ( is_array( $actions ) ) {
 			$actions['receiptful_send_receipt'] = __( 'Send receipt', 'receiptful-for-woocommerce' );
 		}
 
 		return $actions;
-
 	}
-
 
 }

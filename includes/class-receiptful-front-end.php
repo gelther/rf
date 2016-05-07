@@ -20,7 +20,6 @@ class Receiptful_Front_End {
 	 * @since 1.1.4
 	 */
 	public function __construct() {
-
 		// Track pageviews
 		add_action( 'wp_footer', array( $this, 'page_tracking' ) );
 
@@ -31,9 +30,7 @@ class Receiptful_Front_End {
 
 		// Delete user token
 		add_action( 'woocommerce_thankyou', array( $this, 'reset_user_token_cookie' ) );
-
 	}
-
 
 	/**
 	 * Product page tracking.
@@ -47,7 +44,6 @@ class Receiptful_Front_End {
 		return _deprecated_function( __METHOD__, '1.1.6', 'page_tracking' );
 	}
 
-
 	/**
 	 * Page tracking.
 	 *
@@ -56,12 +52,11 @@ class Receiptful_Front_End {
 	 * @since 1.1.6
 	 */
 	public function page_tracking() {
-
-		$public_user_key 	= Receiptful()->api->get_public_user_key();
-		$product_id 		= 'product' == get_post_type( get_the_ID() ) ? get_the_ID() : null;
-		$customer 			= is_user_logged_in() ? get_current_user_id() : '';
-		$cart				= WC()->cart->get_cart();
-		$product_ids		= array_values( wp_list_pluck( $cart, 'product_id' ) );
+		$public_user_key = Receiptful()->api->get_public_user_key();
+		$product_id      = 'product' == get_post_type( get_the_ID() ) ? get_the_ID() : null;
+		$customer        = is_user_logged_in() ? get_current_user_id() : '';
+		$cart            = WC()->cart->get_cart();
+		$product_ids     = array_values( wp_list_pluck( $cart, 'product_id' ) );
 
 		// Bail if public user key is empty/invalid
 		if ( ! $public_user_key ) {
@@ -74,16 +69,14 @@ class Receiptful_Front_End {
 					Receiptful.init({
 						user: '<?php echo esc_js( $public_user_key ); ?>',
 						product: '<?php echo esc_js( $product_id ); ?>',
-						cart: '<?php echo esc_js( implode( ',', $product_ids ) ); ?>',
+						cart: '<?php echo esc_js( implode( ', ', $product_ids ) ); ?>',
 						customer: '<?php echo esc_js( $customer ); ?>',
 						recommend: <?php echo 'yes' == get_option( 'receiptful_enable_recommendations', false ) ? '1' : '0'; ?>
 					});
 				}
 			});
 		</script><?php
-
 	}
-
 
 	/**
 	 * Search.
@@ -93,7 +86,6 @@ class Receiptful_Front_End {
 	 * @since 1.2.3
 	 */
 	public function receiptful_search() {
-
 		$public_user_key = Receiptful()->api->get_public_user_key();
 
 		// Bail if public user key is empty/invalid
@@ -113,9 +105,7 @@ class Receiptful_Front_End {
 				}
 			});
 		</script><?php
-
 	}
-
 
 	/**
 	 * Delete user token.
@@ -126,7 +116,6 @@ class Receiptful_Front_End {
 	 * @since 1.1.6
 	 */
 	public function reset_user_token_cookie( $order_id ) {
-
 		?><script type='text/javascript'>
 			document.addEventListener('DOMContentLoaded', function(event) {
 				if ( typeof Receiptful !== 'undefined' ) {
@@ -134,8 +123,6 @@ class Receiptful_Front_End {
 				}
 			});
 		</script><?php
-
 	}
-
 
 }
