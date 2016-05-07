@@ -9,8 +9,8 @@ if ( ! function_exists( 'wc_get_coupon_by_code' ) ) {
 	 *
 	 * Get the coupon ID by the coupon code.
 	 *
-	 * @param	string		$coupon_code	Code that is used as coupon code.
-	 * @return	int|bool					WP_Post ID if coupon is found, otherwise False.
+	 * @param  string   $coupon_code Code that is used as coupon code.
+	 * @return int|bool              WP_Post ID if coupon is found, otherwise False.
 	 */
 	function wc_get_coupon_by_code( $coupon_code ) {
 
@@ -42,25 +42,25 @@ if ( ! function_exists( 'wc_get_random_products' ) ) {
 	 *
 	 * Get random WC product IDs.
 	 *
-	 * @param	int		$limit	Number of products to return
-	 * @return	array			List of random product IDs.
+	 * @param  int   $limit Number of products to return
+	 * @return array        List of random product IDs.
 	 */
 	function wc_get_random_products( $limit = 2 ) {
 
 		$product_args = array(
-			'fields'			=> 'ids',
-			'post_type'			=> 'product',
-			'post_status'		=> 'publish',
-			'posts_per_page'	=> $limit,
-			'orderby'			=> 'rand',
-			'meta_query'		=> array(
+			'fields'         => 'ids',
+			'post_type'      => 'product',
+			'post_status'    => 'publish',
+			'posts_per_page' => $limit,
+			'orderby'        => 'rand',
+			'meta_query'     => array(
 				array(
-					'meta_key'	=> '_thumbnail_id',
-					'compare'	=> 'EXISTS',
+					'meta_key' => '_thumbnail_id',
+					'compare'  => 'EXISTS',
 				),
 			)
 		);
-		$products = get_posts( $product_args );
+		$products     = get_posts( $product_args );
 
 		return $products;
 
@@ -129,6 +129,7 @@ if ( ! function_exists( 'wc_tax_enabled' ) ) {
 	 * @return bool
 	 */
 	function wc_tax_enabled() {
+
 		return get_option( 'woocommerce_calc_taxes' ) === 'yes';
 	}
 
@@ -145,25 +146,25 @@ if ( ! function_exists( 'wc_tax_enabled' ) ) {
 function receiptful_clear_unused_coupons() {
 
 	$expired_coupons = new WP_Query( array(
-		'post_type' => 'shop_coupon',
-		'fields' => 'ids',
+		'post_type'      => 'shop_coupon',
+		'fields'         => 'ids',
 		'posts_per_page' => 1000,
-		'meta_query' => array(
+		'meta_query'     => array(
 			array(
-				'key' => 'receiptful_coupon',
+				'key'     => 'receiptful_coupon',
 				'compare' => '=',
-				'value' => 'yes',
+				'value'   => 'yes',
 			),
 			array(
-				'key' => 'expiry_date',
+				'key'     => 'expiry_date',
 				'compare' => '<',
-				'type' => 'DATE',
-				'value' => date_i18n( 'Y-m-d', strtotime( '-7 days' ) ),
+				'type'    => 'DATE',
+				'value'   => date_i18n( 'Y-m-d', strtotime( '-7 days' ) ),
 			),
 			array(
-				'key' => 'usage_count',
+				'key'     => 'usage_count',
 				'compare' => '=',
-				'value' => '0',
+				'value'   => '0',
 			),
 		),
 	) );
@@ -174,7 +175,6 @@ function receiptful_clear_unused_coupons() {
 	}
 
 }
-
 
 /**
  * Add Receiptful version endpoint.
@@ -191,6 +191,7 @@ function receiptful_add_active_endpoint() {
 	}
 
 }
+
 if ( isset( $_GET['receiptful_version'] ) ) {
 	add_action( 'init', 'receiptful_add_active_endpoint' );
 }

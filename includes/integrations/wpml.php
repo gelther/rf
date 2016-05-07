@@ -27,7 +27,6 @@ function receiptful_wpml_compat_completed_notification() {
 }
 add_action( 'woocommerce_order_status_completed_notification', 'receiptful_wpml_compat_completed_notification', 5 );
 
-
 /**
  * Remove WPML email.
  *
@@ -44,7 +43,6 @@ function receiptful_wpml_compat_completed_refresh() {
 
 }
 add_action( 'woocommerce_order_status_completed', 'receiptful_wpml_compat_completed_refresh', 5 );
-
 
 /**
  * Remove WPML email.
@@ -63,7 +61,6 @@ function receiptful_wpml_compat_pending_processing() {
 
 }
 add_action( 'woocommerce_order_status_pending_to_processing_notification', 'receiptful_wpml_compat_pending_processing', 5 );
-
 
 /**
  * Remove WPML email.
