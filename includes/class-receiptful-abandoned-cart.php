@@ -58,15 +58,15 @@ class Receiptful_Abandoned_Cart {
 		}
 
 		$cart_args = array(
-			'token'    => $_COOKIE['receiptful-token'],
-			'amount'   => WC()->cart->cart_contents_total + WC()->cart->shipping_total + WC()->cart->get_taxes_total( false, false ),
-			'currency' => get_woocommerce_currency(),
-			'items'    => $this->prep_cart_items( WC()->cart->get_cart() ),
+			'token'		=> $_COOKIE['receiptful-token'],
+			'amount'	=> WC()->cart->cart_contents_total + WC()->cart->shipping_total + WC()->cart->get_taxes_total( false, false ),
+			'currency'	=> get_woocommerce_currency(),
+			'items'		=> $this->prep_cart_items( WC()->cart->get_cart() ),
 		);
 
 		if ( is_user_logged_in() ) {
-			$current_user = wp_get_current_user();
-			$cart_args['customer'] = $current_user->user_email;
+			$current_user			= wp_get_current_user();
+			$cart_args['customer']	= $current_user->user_email;
 		}
 
 		$response = Receiptful()->api->post_cart_update( $cart_args );
@@ -106,12 +106,12 @@ class Receiptful_Abandoned_Cart {
 			}
 
 			$cart_items_args[] = array(
-				'reference'   => $cart_item['product_id'],
-				'variant'     => $cart_item['variation_id'],
-				'description' => $cart_item['data']->get_title(),
-				'quantity'    => $cart_item['quantity'],
-				'amount'      => $price,
-				'attributes'  => $this->prep_cart_item_attributes( $cart_item )
+				'reference'		=> $cart_item['product_id'],
+				'variant'		=> $cart_item['variation_id'],
+				'description'	=> $cart_item['data']->get_title(),
+				'quantity'		=> $cart_item['quantity'],
+				'amount'		=> $price,
+				'attributes'	=> $this->prep_cart_item_attributes( $cart_item )
 			);
 
 		}
@@ -141,8 +141,8 @@ class Receiptful_Abandoned_Cart {
 		if ( isset( $cart_item['variation'] ) && is_array( $cart_item['variation'] ) ) {
 			foreach ( $cart_item['variation'] as $key => $value ) {
 				$attributes[] = array(
-					'key'   => $key,
-					'value' => $value,
+					'key'	=> $key,
+					'value'	=> $value,
 				);
 			}
 		}
@@ -159,7 +159,7 @@ class Receiptful_Abandoned_Cart {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @return bool false when the ID is not recognized.
+	 * @return	bool	false when the ID is not recognized.
 	 */
 	public function recover_cart() {
 
@@ -204,7 +204,6 @@ class Receiptful_Abandoned_Cart {
 			die;
 		}
 
-
 	}
 
 
@@ -215,7 +214,7 @@ class Receiptful_Abandoned_Cart {
 	 *
 	 * @since 1.2.1
 	 *
-	 * @param int $order_id ID of the order being created.
+	 * @param	int	$order_id	ID of the order being created.
 	 */
 	public function delete_abandoned_cart( $order_id ) {
 
@@ -226,5 +225,6 @@ class Receiptful_Abandoned_Cart {
 		}
 
 	}
+
 
 }
