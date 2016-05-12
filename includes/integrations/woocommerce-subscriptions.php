@@ -45,13 +45,14 @@ function receiptful_wcs_remove_email( $emails ) {
 
 
 add_filter( 'woocommerce_subscriptions_renewal_order_meta_query', 'receiptful_wcs_do_not_copy_meta_data', 10, 4 );
+
 /**
  * Do not copy receiptful meta data for WC Subscription renewals
  *
- * @param $order_meta_query
- * @param $original_order_id
- * @param $renewal_order_id
- * @param $new_order_role
+ * @param         $order_meta_query
+ * @param         $original_order_id
+ * @param         $renewal_order_id
+ * @param         $new_order_role
  *
  * @return string
  */
@@ -65,6 +66,7 @@ function receiptful_wcs_do_not_copy_meta_data( $order_meta_query, $original_orde
 
 
 add_filter( 'receiptful_hidden_order_itemmeta', 'receiptful_wcs_hide_subscription_meta_from_mail' );
+
 /**
  * Remove subscription meta.
  *
@@ -73,8 +75,8 @@ add_filter( 'receiptful_hidden_order_itemmeta', 'receiptful_wcs_hide_subscriptio
  *
  * @since 1.1.0
  *
- * @param	array $existing_meta	List of existing meta being excluded.
- * @return	array					List of modified meta being excluded, this includes subscription meta.
+ * @param  array $existing_meta List of existing meta being excluded.
+ * @return array                List of modified meta being excluded, this includes subscription meta.
  */
 function receiptful_wcs_hide_subscription_meta_from_mail( $existing_meta ) {
 
