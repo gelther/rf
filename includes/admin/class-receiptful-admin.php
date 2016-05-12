@@ -82,7 +82,7 @@ class Receiptful_Admin {
 		add_action( 'admin_notices', array( $this, 'plugin_activation' ) ) ;
 
 		// Add the plugin page Settings and Docs links
-		add_filter( 'plugin_action_links_' . plugin_basename( Receiptful()->file ), array( $this, 'receiptful_plugin_links' ));
+		add_filter( 'plugin_action_links_' . plugin_basename( Receiptful()->file ), array( $this, 'receiptful_plugin_links' ) );
 
 	}
 
@@ -113,16 +113,16 @@ class Receiptful_Admin {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return array List of settings for the settings page.
+	 * @return	array	List of settings for the settings page.
 	 */
 	public function get_settings() {
 
 		$settings = apply_filters( 'woocommerce_receiptful_settings', array(
 
 			array(
-				'title'		=> 'Receiptful',
-				'type'		=> 'title',
-				'desc'		=> sprintf( __( "To get started with Receiptful, please add your API key (<a href='%s' target='_blank'>which you can find here</a>) and save the settings.", 'receiptful-for-woocommerce' ), $this->receiptful_profile_url ),
+				'title'	=> 'Receiptful',
+				'type'	=> 'title',
+				'desc'	=> sprintf( __( "To get started with Receiptful, please add your API key (<a href='%s' target='_blank'>which you can find here</a>) and save the settings.", 'receiptful-for-woocommerce' ), $this->receiptful_profile_url ),
 			),
 			array(
 				'title'		=> __( 'API Key', 'receiptful-for-woocommerce' ),
@@ -133,40 +133,40 @@ class Receiptful_Admin {
 				'autoload'	=> false
 			),
 			array(
-				'type'		=> 'sectionend',
+				'type'	=> 'sectionend',
 			),
 			array(
-				'title'		=> '',
-				'type'		=> 'title',
-				'desc'		=> sprintf( __( "<a href='%s'>Edit My Template</a> | <a href='%s'>View Statistics</a>", 'receiptful-for-woocommerce' ),	$this->receiptful_template_url, $this->receiptful_stats_url ),
-				'id'		=> 'receiptful_links',
+				'title'	=> '',
+				'type'	=> 'title',
+				'desc'	=> sprintf( __( "<a href='%s'>Edit My Template</a> | <a href='%s'>View Statistics</a>", 'receiptful-for-woocommerce' ), $this->receiptful_template_url, $this->receiptful_stats_url ),
+				'id'	=> 'receiptful_links',
 			),
 			array(
-				'title'   	=> __( 'Enable recommendations', 'receiptful-for-woocommerce' ),
-				'desc' 	  	=> sprintf( __( "Enable product recommendations. Requires to have set this up in the <a href='%s'>Recommendations section</a>.", 'receiptful-for-woocommerce' ), $this->receiptful_recommendations_url ),
-				'id' 	  	=> 'receiptful_enable_recommendations',
-				'default' 	=> 'no',
-				'type' 	  	=> 'checkbox',
+				'title'		=> __( 'Enable recommendations', 'receiptful-for-woocommerce' ),
+				'desc'		=> sprintf( __( "Enable product recommendations. Requires to have set this up in the <a href='%s'>Recommendations section</a>.", 'receiptful-for-woocommerce' ), $this->receiptful_recommendations_url ),
+				'id'		=> 'receiptful_enable_recommendations',
+				'default'	=> 'no',
+				'type'		=> 'checkbox',
 				'autoload'	=> false
 			),
 			array(
-				'title'   	=> __( 'Enable abandoned cart', 'receiptful-for-woocommerce' ),
-				'desc' 	  	=> __( "Enable the abandoned cart functionality.", 'receiptful-for-woocommerce' ),
-				'id' 	  	=> 'receiptful_enable_abandoned_cart',
-				'default' 	=> 'no',
-				'type' 	  	=> 'checkbox',
+				'title'		=> __( 'Enable abandoned cart', 'receiptful-for-woocommerce' ),
+				'desc'		=> __( 'Enable the abandoned cart functionality.', 'receiptful-for-woocommerce' ),
+				'id'		=> 'receiptful_enable_abandoned_cart',
+				'default'	=> 'no',
+				'type'		=> 'checkbox',
 				'autoload'	=> false
 			),
 			array(
-				'title'   	=> __( 'Enable Receiptful search', 'receiptful-for-woocommerce' ),
-				'desc' 	  	=> __( "Enable the Receiptful search functionality.", 'receiptful-for-woocommerce' ),
-				'id' 	  	=> 'receiptful_enable_search',
-				'default' 	=> 'no',
-				'type' 	  	=> 'checkbox',
+				'title'		=> __( 'Enable Receiptful search', 'receiptful-for-woocommerce' ),
+				'desc'		=> __( 'Enable the Receiptful search functionality.', 'receiptful-for-woocommerce' ),
+				'id'		=> 'receiptful_enable_search',
+				'default'	=> 'no',
+				'type'		=> 'checkbox',
 				'autoload'	=> false
 			),
 			array(
-				'type'		=> 'sectionend',
+				'type'	=> 'sectionend',
 			),
 
 		) );
@@ -232,15 +232,15 @@ class Receiptful_Admin {
 	 */
 	public function receiptful_status_tools( $tools ) {
 
-		$sync_queue = get_option( '_receiptful_queue', array( 'products' => array(), 'orders' => array() ) );
-		$product_count_message = '';
-		$order_count_message = '';
+		$sync_queue				= get_option( '_receiptful_queue', array( 'products' => array(), 'orders' => array() ) );
+		$product_count_message	= '';
+		$order_count_message	= '';
 		if ( ! empty( $sync_queue['products'] ) ) {
-			$product_count_message = '<strong>' . sprintf(  __( '%d products to be synced.', 'receiptful-for-woocommerce' ), count( $sync_queue['products']) ) . '</strong>&nbsp;';
+			$product_count_message = '<strong>' . sprintf( __( '%d products to be synced.', 'receiptful-for-woocommerce' ), count( $sync_queue['products'] ) ) . '</strong>&nbsp;';
 		}
 
 		if ( ! empty( $sync_queue['orders'] ) ) {
-			$order_count_message = '<strong>' . sprintf(  __( '%d orders to be synced.', 'receiptful-for-woocommerce' ), count( $sync_queue['orders']) ) . '</strong>&nbsp;';
+			$order_count_message = '<strong>' . sprintf( __( '%d orders to be synced.', 'receiptful-for-woocommerce' ), count( $sync_queue['orders'] ) ) . '</strong>&nbsp;';
 		}
 
 		$tools['receiptful_product_sync'] = array(
@@ -261,12 +261,12 @@ class Receiptful_Admin {
 			'desc'		=> __( 'Only coupons that have been expired for more than 7 days will be trashed.', 'receiptful' ),
 		);
 
-		$tools['receiptful_clear_coupons'] = array(
+		$tools['receiptful_clear_coupons']		= array(
 			'name'		=> __( 'Clear unused, expired coupons created by Receiptful', 'receiptful' ),
 			'button'	=> __( 'Trash expired coupons', 'receiptful' ),
 			'desc'		=> __( 'Only coupons that have been expired for more than 7 days will be trashed.', 'receiptful' ),
 		);
-		$tools['receiptful_clear_resend_queue'] = array(
+		$tools['receiptful_clear_resend_queue']	= array(
 			'name'		=> __( 'Clear resend queue', 'receiptful' ),
 			'button'	=> __( 'Clear queue', 'receiptful' ),
 			'desc'		=> __( 'Clear all the receipts on the Receiptful resend queue.', 'receiptful' ),
@@ -301,13 +301,13 @@ class Receiptful_Admin {
 		if ( 'receiptful_product_sync' == $_GET['action'] ) {
 
 			// Get all product IDs
-			$product_ids = get_posts( array(
+			$product_ids	= get_posts( array(
 				'fields'			=> 'ids',
 				'posts_per_page'	=> -1,
 				'post_type'			=> 'product',
 				'post_status'		=> 'any',
 			) );
-			$product_ids = array_map( 'absint', $product_ids );
+			$product_ids	= array_map( 'absint', $product_ids );
 
 			$queue = get_option( '_receiptful_queue', array() );
 			foreach ( $product_ids as $product_id ) {
@@ -321,13 +321,13 @@ class Receiptful_Admin {
 		if ( 'receiptful_receipt_sync' == $_GET['action'] ) {
 
 			// Get all receipt IDs
-			$order_ids = get_posts( array(
+			$order_ids	= get_posts( array(
 				'fields'			=> 'ids',
 				'posts_per_page'	=> -1,
 				'post_type'			=> 'shop_order',
 				'post_status'		=> array_keys( wc_get_order_statuses() ),
 			) );
-			$order_ids = array_map( 'absint', $order_ids );
+			$order_ids	= array_map( 'absint', $order_ids );
 
 			$queue = get_option( '_receiptful_queue', array() );
 			foreach ( $order_ids as $order_id ) {
@@ -391,8 +391,8 @@ class Receiptful_Admin {
 	 * @since 1.0.0
 	 * @since 1.2.2 - Moved to admin class
 	 *
-	 * @param 	array $links	List of existing plugin links.
-	 * @return 	array			List of modified plugin links.
+	 * @param	array	$links	List of existing plugin links.
+	 * @return	array			List of modified plugin links.
 	 */
 	function receiptful_plugin_links( $links ) {
 
