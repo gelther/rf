@@ -51,7 +51,7 @@ class Receiptful_Email {
 		add_action( 'woocommerce_order_actions', array( $this, 'receiptful_order_actions' ) );
 
 		// Order Action callback
-		add_action( 'woocommerce_order_action_receiptful_send_receipt', array( $this, 'send_transactional_email' ), 60);
+		add_action( 'woocommerce_order_action_receiptful_send_receipt', array( $this, 'send_transactional_email' ), 60 );
 
 	}
 
@@ -64,7 +64,7 @@ class Receiptful_Email {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param	array $emails	List of existing/registered WC emails.
+	 * @param	array	$emails	List of existing/registered WC emails.
 	 * @return	array			List of modified WC emails.
 	 */
 	public function update_woocommerce_email( $emails ) {
@@ -113,7 +113,7 @@ class Receiptful_Email {
 	 *
 	 * @param	array	$data		List of data returned by the Receiptful API.
 	 * @param	int		$order_id	ID of the order being processed.
-	 * @return  int     $id         ID of new coupon
+	 * @return	int		$id			ID of new coupon
 	 */
 	public function create_coupon( $data, $order_id ) {
 
@@ -130,8 +130,8 @@ class Receiptful_Email {
 			return $coupon_found;
 		}
 
-		$expiry_days = absint( $data['expiryPeriod'] ) + 1;
-		$expiry_date = date_i18n( 'Y-m-d', strtotime( '+' . $expiry_days . ' day' ) );
+		$expiry_days	= absint( $data['expiryPeriod'] ) + 1;
+		$expiry_date	= date_i18n( 'Y-m-d', strtotime( '+' . $expiry_days . ' day' ) );
 
 		if ( 'discountcoupon' == $data['upsellType'] ) {
 
@@ -149,7 +149,7 @@ class Receiptful_Email {
 
 		} elseif ( 'shippingcoupon' == $data['upsellType'] ) {
 
-			$shipping_coupon 	= 'yes';
+			$shipping_coupon	= 'yes';
 			$data['amount']		= '';
 
 		}
@@ -177,7 +177,7 @@ class Receiptful_Email {
 			'receiptful_coupon_order'		=> $order_id,
 		), $order_id, $data );
 
-		$new_coupon = array(
+		$new_coupon	= array(
 			'post_title'	=> $coupon_code,
 			'post_content'	=> '',
 			'post_status'	=> 'publish',
@@ -185,7 +185,7 @@ class Receiptful_Email {
 			'post_type'		=> 'shop_coupon',
 			'post_excerpt'	=> isset( $data['title'] ) ? wc_clean( $data['title'] ) : '',
 		);
-		$id = wp_insert_post( $new_coupon );
+		$id			= wp_insert_post( $new_coupon );
 
 		// set coupon meta
 		foreach ( $coupon_data as $key => $value ) {
@@ -213,7 +213,7 @@ class Receiptful_Email {
 		$receipt_id				= get_post_meta( $order->id, '_receiptful_receipt_id', true );
 		$receiptful_web_link	= get_post_meta( $order->id, '_receiptful_web_link', true );
 
-		if ( $receipt_id && $receiptful_web_link ){
+		if ( $receipt_id && $receiptful_web_link ) {
 			// Id exists so remove old View button and add Receiptful button
 			unset( $actions['view'] );
 
@@ -245,8 +245,8 @@ class Receiptful_Email {
 			WC()->mailer();
 			foreach ( $resend_queue as $key => $order_id ) {
 
-				$receiptful_email 	= new Receiptful_Email_Customer_New_Order();
-				$response 			= $receiptful_email->trigger( $order_id );
+				$receiptful_email	= new Receiptful_Email_Customer_New_Order();
+				$response			= $receiptful_email->trigger( $order_id );
 
 				if ( ! is_wp_error( $response ) && in_array( $response['response']['code'], array( '200', '201', '400' ) ) ) {
 					unset( $resend_queue[ $key ] );
@@ -268,8 +268,8 @@ class Receiptful_Email {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param	array $actions	List of existing order actions.
-	 * @return	array			List of modified order actions.
+	 * @param	array	$actions	List of existing order actions.
+	 * @return	array				List of modified order actions.
 	 */
 	public function receiptful_order_actions( $actions ) {
 
