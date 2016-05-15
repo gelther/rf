@@ -65,7 +65,7 @@ class Receiptful_Abandoned_Cart {
 		);
 
 		if ( is_user_logged_in() ) {
-			$current_user = wp_get_current_user();
+			$current_user          = wp_get_current_user();
 			$cart_args['customer'] = $current_user->user_email;
 		}
 
@@ -83,8 +83,8 @@ class Receiptful_Abandoned_Cart {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param	array		$cart_items	List of cart items.
-	 * @return	array|bool				False when no cart items. Formatted cart item list otherwise.
+	 * @param  array      $cart_items List of cart items.
+	 * @return array|bool             False when no cart items. Formatted cart item list otherwise.
 	 */
 	public function prep_cart_items( $cart_items ) {
 
@@ -128,8 +128,8 @@ class Receiptful_Abandoned_Cart {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param	array	$cart_item	List of cart item data.
-	 * @return	array				List of cart item variable attributes.
+	 * @param  array $cart_item List of cart item data.
+	 * @return array            List of cart item variable attributes.
 	 */
 	public function prep_cart_item_attributes( $cart_item ) {
 
@@ -182,10 +182,10 @@ class Receiptful_Abandoned_Cart {
 					continue;
 				}
 
-				$product_id		= $values['reference'];
-				$quantity		= isset( $values['quantity'] ) ? $values['quantity'] : '1';
-				$variation_id	= isset( $values['variant'] )  ? $values['variant']  : '';
-				$var			= '';
+				$product_id   = $values['reference'];
+				$quantity     = isset( $values['quantity'] ) ? $values['quantity'] : '1';
+				$variation_id = isset( $values['variant'] )  ? $values['variant']  : '';
+				$var          = '';
 
 				if ( empty( $var ) && ! empty( $values['attributes'] ) ) {
 					foreach ( $values['attributes'] as $key => $value ) {
@@ -203,7 +203,6 @@ class Receiptful_Abandoned_Cart {
 			wp_redirect( add_query_arg( 'receiptful', $_GET['receiptful'], WC()->cart->get_cart_url() ) );
 			die;
 		}
-
 
 	}
 
@@ -226,5 +225,6 @@ class Receiptful_Abandoned_Cart {
 		}
 
 	}
+
 
 }
