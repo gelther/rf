@@ -30,25 +30,25 @@ class Receiptful_Recommendations {
 	/**
 	 * Get recommendations.
 	 *
-	 * Get the recommendations HTML.
+	 *  Get the recommendations HTML.
 	 *
 	 * @since 1.1.6
 	 *
-	 * @param	array	$args	List of arguments for the recommendations.
-	 * @return	string			HTML code with the appropriate attributes.
+	 * @param  array  $args List of arguments for the recommendations.
+	 * @return string       HTML code with the appropriate attributes.
 	 */
 	public function get_recommendations( $args = array() ) {
 
 		$args = wp_parse_args( $args, array(
-			'name'		  			=> null,
-			'show_header' 			=> null,
-			'header_text' 			=> null,
-			'header_type' 			=> null,
-			'show_title'  			=> null,
-			'show_price'  			=> null,
-			'price_format'			=> null,
-			'number_of_products'	=> null,
-			'styles'				=> null,
+			'name'               => null,
+			'show_header'        => null,
+			'header_text'        => null,
+			'header_type'        => null,
+			'show_title'         => null,
+			'show_price'         => null,
+			'price_format'       => null,
+			'number_of_products' => null,
+			'styles'             => null,
 		) );
 
 		if ( 'false' == $args['show_title'] || '0' == $args['show_title'] ) :
@@ -80,17 +80,18 @@ class Receiptful_Recommendations {
 	/**
 	 * Display recommendations.
 	 *
-	 * Display the recommendations HTML.
+	 *  Display the recommendations HTML.
 	 *
 	 * @since 1.1.6
 	 *
-	 * @param	array	$args	Recommendation arguments.
+	 * @param array $args Recommendation arguments.
 	 */
 	public function display_recommendations( $args = array() ) {
 
 		echo $this->get_recommendations( $args );
 
 	}
+
 
 	/**
 	 * Recommendation shortcode.
@@ -100,21 +101,21 @@ class Receiptful_Recommendations {
 	 *
 	 * @since 1.1.6
 	 *
-	 * @param	array	$args	Recommendation arguments.
-	 * @return	string			HTML for displaying recommendations.
+	 * @param  array  $args Recommendation arguments.
+	 * @return string       HTML for displaying recommendations.
 	 */
 	public function recommendation_shortcode( $atts = array() ) {
 
 		$args = shortcode_atts( array(
-			'name'		  			=> null,
-			'show_header' 			=> null,
-			'header_text' 			=> null,
-			'header_type' 			=> null,
-			'show_title'  			=> null,
-			'show_price'  			=> null,
-			'price_format'			=> null,
-			'number_of_products'	=> null,
-			'styles'				=> null,
+			'name'               => null,
+			'show_header'        => null,
+			'header_text'        => null,
+			'header_type'        => null,
+			'show_title'         => null,
+			'show_price'         => null,
+			'price_format'       => null,
+			'number_of_products' => null,
+			'styles'             => null,
 		), $atts );
 
 		return $this->get_recommendations( $args );
