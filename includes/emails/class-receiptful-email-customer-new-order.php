@@ -285,7 +285,7 @@ if ( ! class_exists( 'Receiptful_Email_Customer_New_Order' ) ) {
 					$img_src = wc_placeholder_img_src( 'shop_thumbnail' );
 				}
 
-				$inc_tax = 'incl' == $order->tax_display_cart ? true : false;
+				$inc_tax        = 'incl' == $order->tax_display_cart ? true : false;
 				$product_amount = $order->get_line_subtotal( $item, $inc_tax, false ) / $item['qty'];
 
 				$items[] = array(
