@@ -39,8 +39,8 @@ class Receiptful_Order {
 	 *
 	 * @since 1.1.6
 	 *
-	 * @param int 	$order_id	ID of the order that is being processed.
-	 * @param array	$posted		List of $_POST values.
+	 * @param	int		$order_id	ID of the order that is being processed.
+	 * @param	array	$posted		List of $_POST values.
 	 */
 	public function order_save_user_token( $order_id, $posted ) {
 
@@ -82,7 +82,6 @@ class Receiptful_Order {
 	}
 
 
-
 	/**
 	 * Process orders queue.
 	 *
@@ -97,17 +96,17 @@ class Receiptful_Order {
 
 		if ( isset( $queue['orders'] ) && is_array( $queue['orders'] ) ) {
 
-			$upload_args = array();
-			$receipt_ids = array_slice( $queue['orders'], 0, 225, true );
+			$upload_args	= array();
+			$receipt_ids	= array_slice( $queue['orders'], 0, 225, true );
 			foreach ( $receipt_ids as $key => $order ) {
 
 				if ( 'upload' == $order['action'] ) {
 
-					$order		= wc_get_order( $order['id'] );
-					$items 		= WC()->mailer->emails['WC_Email_Customer_Completed_Order']->api_args_get_items( $order );
-					$subtotals 	= WC()->mailer->emails['WC_Email_Customer_Completed_Order']->api_args_get_subtotals( $order );
-					$order_args	= WC()->mailer->emails['WC_Email_Customer_Completed_Order']->api_args_get_order_args( $order, $items, $subtotals, $related_products = array() );
-					$order_args['status'] = $order->get_status(); // Give bulk uploads a order status
+					$order					= wc_get_order( $order['id'] );
+					$items					= WC()->mailer->emails['WC_Email_Customer_Completed_Order']->api_args_get_items( $order );
+					$subtotals				= WC()->mailer->emails['WC_Email_Customer_Completed_Order']->api_args_get_subtotals( $order );
+					$order_args				= WC()->mailer->emails['WC_Email_Customer_Completed_Order']->api_args_get_order_args( $order, $items, $subtotals, $related_products = array() );
+					$order_args['status']	= $order->get_status(); // Give bulk uploads a order status
 
 					$upload_args[] = $order_args;
 
@@ -129,8 +128,8 @@ class Receiptful_Order {
 
 				} elseif ( ! is_wp_error( $response ) && in_array( $response['response']['code'], array( '200', '202' ) ) ) { // Update only the ones without error - retry the ones with error
 
-					$failed_ids = array();
-					$body 		= json_decode( $response['body'], 1 );
+					$failed_ids	= array();
+					$body		= json_decode( $response['body'], 1 );
 					foreach ( $body['errors'] as $error ) {
 						$failed_ids[] = isset( $error['error']['reference'] ) ? $error['error']['reference'] : null;
 					}

@@ -30,7 +30,7 @@ class Receiptful_Recommendations {
 	/**
 	 * Get recommendations.
 	 *
-	 * Get the recommendations HTML.
+	 *  Get the recommendations HTML.
 	 *
 	 * @since 1.1.6
 	 *
@@ -40,12 +40,12 @@ class Receiptful_Recommendations {
 	public function get_recommendations( $args = array() ) {
 
 		$args = wp_parse_args( $args, array(
-			'name'		  			=> null,
-			'show_header' 			=> null,
-			'header_text' 			=> null,
-			'header_type' 			=> null,
-			'show_title'  			=> null,
-			'show_price'  			=> null,
+			'name'					=> null,
+			'show_header'			=> null,
+			'header_text'			=> null,
+			'header_type'			=> null,
+			'show_title'			=> null,
+			'show_price'			=> null,
 			'price_format'			=> null,
 			'number_of_products'	=> null,
 			'styles'				=> null,
@@ -80,7 +80,7 @@ class Receiptful_Recommendations {
 	/**
 	 * Display recommendations.
 	 *
-	 * Display the recommendations HTML.
+	 *  Display the recommendations HTML.
 	 *
 	 * @since 1.1.6
 	 *
@@ -91,6 +91,7 @@ class Receiptful_Recommendations {
 		echo $this->get_recommendations( $args );
 
 	}
+
 
 	/**
 	 * Recommendation shortcode.
@@ -106,12 +107,12 @@ class Receiptful_Recommendations {
 	public function recommendation_shortcode( $atts = array() ) {
 
 		$args = shortcode_atts( array(
-			'name'		  			=> null,
-			'show_header' 			=> null,
-			'header_text' 			=> null,
-			'header_type' 			=> null,
-			'show_title'  			=> null,
-			'show_price'  			=> null,
+			'name'					=> null,
+			'show_header'			=> null,
+			'header_text'			=> null,
+			'header_type'			=> null,
+			'show_title'			=> null,
+			'show_price'			=> null,
 			'price_format'			=> null,
 			'number_of_products'	=> null,
 			'styles'				=> null,

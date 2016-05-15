@@ -44,7 +44,9 @@ class Receiptful_Front_End {
 	 * @deprecated 1.1.6
 	 */
 	public function product_page_tracking() {
+
 		return _deprecated_function( __METHOD__, '1.1.6', 'page_tracking' );
+
 	}
 
 
@@ -57,9 +59,9 @@ class Receiptful_Front_End {
 	 */
 	public function page_tracking() {
 
-		$public_user_key 	= Receiptful()->api->get_public_user_key();
-		$product_id 		= 'product' == get_post_type( get_the_ID() ) ? get_the_ID() : null;
-		$customer 			= is_user_logged_in() ? get_current_user_id() : '';
+		$public_user_key	= Receiptful()->api->get_public_user_key();
+		$product_id			= 'product' == get_post_type( get_the_ID() ) ? get_the_ID() : null;
+		$customer			= is_user_logged_in() ? get_current_user_id() : '';
 		$cart				= WC()->cart->get_cart();
 		$product_ids		= array_values( wp_list_pluck( $cart, 'product_id' ) );
 

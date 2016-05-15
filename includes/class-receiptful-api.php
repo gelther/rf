@@ -35,7 +35,9 @@ class Receiptful_Api {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
+
 		$this->api_key = get_option( 'receiptful_api_key' );
+
 	}
 
 
@@ -65,8 +67,8 @@ class Receiptful_Api {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param	int				$receipt_id		Receiptful receipt ID, as retrieved from original API call.
-	 * @return	array|WP_Error					WP_Error when the API call fails, otherwise the API response.
+	 * @param	int				$receipt_id	Receiptful receipt ID, as retrieved from original API call.
+	 * @return	array|WP_Error				WP_Error when the API call fails, otherwise the API response.
 	 */
 	public function resend_receipt( $receipt_id ) {
 
@@ -84,9 +86,9 @@ class Receiptful_Api {
 	 *
 	 * @since 1.1.1
 	 *
-	 * @param	int				$product_id		Product ID to update in Receiptful.
-	 * @param	array			$args			Product arguments to update.
-	 * @return	array|WP_Error					WP_Error when the API call fails, otherwise the API response.
+	 * @param	int				$product_id	Product ID to update in Receiptful.
+	 * @param	array			$args		Product arguments to update.
+	 * @return	array|WP_Error				WP_Error when the API call fails, otherwise the API response.
 	 */
 	public function update_product( $product_id, $args ) {
 
@@ -123,8 +125,8 @@ class Receiptful_Api {
 	 *
 	 * @since 1.1.1
 	 *
-	 * @param	int				$product_id		Product ID to delete from Receiptful.
-	 * @return	array|WP_Error					WP_Error when the API call fails, otherwise the API response.
+	 * @param	int				$product_id	Product ID to delete from Receiptful.
+	 * @return	array|WP_Error				WP_Error when the API call fails, otherwise the API response.
 	 */
 	public function delete_product( $product_id ) {
 
@@ -193,8 +195,8 @@ class Receiptful_Api {
 		if ( is_wp_error( $response ) || '200' != $response['response']['code'] ) {
 			$cart = false;
 		} else {
-			$response_body 	= json_decode( $response['body'], 1 );
-			$cart = $response_body;
+			$response_body	= json_decode( $response['body'], 1 );
+			$cart			= $response_body;
 		}
 
 		return $cart;
@@ -228,7 +230,7 @@ class Receiptful_Api {
 	 *
 	 * @since 1.1.4
 	 *
-	 * @return array|WP_Error WP_Error when the API call fails, otherwise the API response.
+	 * @return	array|WP_Error	WP_Error when the API call fails, otherwise the API response.
 	 */
 	public function get_public_user_key() {
 
@@ -241,8 +243,8 @@ class Receiptful_Api {
 			if ( is_wp_error( $response ) || '200' != $response['response']['code'] ) {
 				$public_key = '';
 			} else {
-				$response_body 	= json_decode( $response['body'], 1 );
-				$public_key 	= isset( $response_body['publicKey'] ) ? $response_body['publicKey'] : '';
+				$response_body	= json_decode( $response['body'], 1 );
+				$public_key		= isset( $response_body['publicKey'] ) ? $response_body['publicKey'] : '';
 				update_option( 'receiptful_public_user_key', $public_key );
 			}
 
@@ -261,10 +263,10 @@ class Receiptful_Api {
 	 * @since 1.1.4
 	 * @since 1.2.0 Add $request_args param.
 	 *
-	 * @param	string	$method				API method to call.
-	 * @param	array	$args				Arguments to pass in the API call.
-	 * @param	array	$request_args		List of arguments to override default request arguments.
-	 * @return	array	$response|WP_Error	API response.
+	 * @param	string	$method			API method to call.
+	 * @param	array	$args			Arguments to pass in the API call.
+	 * @param	array	$request_args	List of arguments to override default request arguments.
+	 * @return	array	$response		|WP_Error	API response.
 	 */
 	protected function api_get( $method, $args = array(), $request_args = array() ) {
 
@@ -300,10 +302,10 @@ class Receiptful_Api {
 	 * @since 1.0.0
 	 * @since 1.2.0 Add $request_args param.
 	 *
-	 * @param	string	$method				API method to call.
-	 * @param	array	$args				Arguments to pass in the API call.
-	 * @param	array	$request_args		List of arguments to override default request arguments.
-	 * @return	array	$response|WP_Error	API response.
+	 * @param	string	$method			API method to call.
+	 * @param	array	$args			Arguments to pass in the API call.
+	 * @param	array	$request_args	List of arguments to override default request arguments.
+	 * @return	array	$response		|WP_Error	API response.
 	 */
 	protected function api_call( $method, $args = array(), $request_args = array() ) {
 
@@ -340,10 +342,10 @@ class Receiptful_Api {
 	 * @since 1.1.1
 	 * @since 1.2.0 Add $request_args param.
 	 *
-	 * @param	string	$method				API method to call.
-	 * @param	array	$args				Arguments to pass in the API call.
-	 * @param	array	$request_args		List of arguments to override default request arguments.
-	 * @return	array	$response|WP_Error	API response.
+	 * @param	string	$method			API method to call.
+	 * @param	array	$args			Arguments to pass in the API call.
+	 * @param	array	$request_args	List of arguments to override default request arguments.
+	 * @return	array	$response		|WP_Error	API response.
 	 */
 	protected function api_put( $method, $args = array(), $request_args = array() ) {
 
@@ -380,9 +382,9 @@ class Receiptful_Api {
 	 * @since 1.1.1
 	 * @since 1.2.0 Add $request_args param.
 	 *
-	 * @param	string	$method				API method to call.
-	 * @param	array	$request_args		List of arguments to override default request arguments.
-	 * @return	array	$response|WP_Error	API response.
+	 * @param	string	$method			API method to call.
+	 * @param	array	$request_args	List of arguments to override default request arguments.
+	 * @return	array	$response		|WP_Error	API response.
 	 */
 	protected function api_delete( $method, $request_args = array() ) {
 

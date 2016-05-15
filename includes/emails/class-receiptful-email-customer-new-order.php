@@ -24,9 +24,9 @@ if ( ! class_exists( 'Receiptful_Email_Customer_New_Order' ) ) {
 		 */
 		public function __construct() {
 
-			$this->id				= 'customer_new_order';
-			$this->title			= __( 'Receiptful New Order', 'receiptful-for-woocommerce' );
-			$this->description		= __( 'Receiptful will send a new order receipt when the order is placed.', 'receiptful-for-woocommerce' );
+			$this->id			= 'customer_new_order';
+			$this->title		= __( 'Receiptful New Order', 'receiptful-for-woocommerce' );
+			$this->description	= __( 'Receiptful will send a new order receipt when the order is placed.', 'receiptful-for-woocommerce' );
 
 			// Triggers for this email
 			add_action( 'receiptful_order_status_processing_notification', array( $this, 'trigger' ) );
@@ -47,7 +47,7 @@ if ( ! class_exists( 'Receiptful_Email_Customer_New_Order' ) ) {
 		public function init_form_fields() {
 
 			$this->form_fields = array(
-				'enabled' => array(
+				'enabled'	=> array(
 					'title'		=> __( 'Enable/Disable', 'receiptful-for-woocommerce' ),
 					'type'		=> 'checkbox',
 					'label'		=> __( 'Enable this email notification', 'receiptful-for-woocommerce' ),
@@ -106,14 +106,14 @@ if ( ! class_exists( 'Receiptful_Email_Customer_New_Order' ) ) {
 				$order->add_order_note( sprintf( __( 'Error sending customer receipt via Receiptful. <br/> Error Message: %1$s. Receipt added to resend queue.', 'receiptful-for-woocommerce' ), implode( ', ', $response->get_error_messages() ) ) );
 
 				// queue the message for sending via cron
-				$resend_queue	= get_option( '_receiptful_resend_queue' );
+				$resend_queue				= get_option( '_receiptful_resend_queue' );
 				$resend_queue[ $order->id ]	= $order->id;
 				update_option( '_receiptful_resend_queue', $resend_queue );
 
 			} elseif ( $response['response']['code'] == '201' ) {
 
 				$order->add_order_note( 'Customer receipt sent via Receiptful.' );
-				$body = json_decode( $response ['body'], true);
+				$body = json_decode( $response ['body'], true );
 
 				add_post_meta( $order->id, '_receiptful_web_link', $body['_meta']['links'] );
 				add_post_meta( $order->id, '_receiptful_receipt_id', $body['_id'] );
@@ -128,7 +128,7 @@ if ( ! class_exists( 'Receiptful_Email_Customer_New_Order' ) ) {
 				$order->add_order_note( sprintf( __( 'Error sending customer receipt via Receiptful. <br/> Error Code: %1$s <br/> Error Message: %2$s. Receipt added to resend queue.', 'receiptful-for-woocommerce' ), $response['response']['code'], $response['response']['message'] ) );
 
 				// queue the message for sending via cron
-				$resend_queue	= get_option( '_receiptful_resend_queue' );
+				$resend_queue				= get_option( '_receiptful_resend_queue' );
 				$resend_queue[ $order->id ]	= $order->id;
 				update_option( '_receiptful_resend_queue', $resend_queue );
 
@@ -168,7 +168,7 @@ if ( ! class_exists( 'Receiptful_Email_Customer_New_Order' ) ) {
 				$order->add_order_note( sprintf( __( 'Error resending customer receipt via Receiptful. <br/> Error Message: %1$s. <br/> Receipt added to resend queue.', 'receiptful-for-woocommerce' ), implode( ', ', $response->get_error_messages() ) ) );
 
 				// queue the message for sending via cron
-				$resend_queue	= get_option( '_receiptful_resend_queue' );
+				$resend_queue				= get_option( '_receiptful_resend_queue' );
 				$resend_queue[ $order->id ]	= $order->id;
 				update_option( '_receiptful_resend_queue', $resend_queue );
 
@@ -181,7 +181,7 @@ if ( ! class_exists( 'Receiptful_Email_Customer_New_Order' ) ) {
 				$order->add_order_note( sprintf( __( 'Error resending customer receipt via Receiptful. <br/> Error Code: %1$s <br/> Error Message: %2$s. <br/> Receipt added to resend queue.', 'receiptful-for-woocommerce' ), $response['response']['code'], $response['response']['message'] ) );
 
 				// queue the message for sending via cron
-				$resend_queue	= get_option( '_receiptful_resend_queue' );
+				$resend_queue				= get_option( '_receiptful_resend_queue' );
 				$resend_queue[ $order->id ]	= $order->id;
 				update_option( '_receiptful_resend_queue', $resend_queue );
 
@@ -285,8 +285,8 @@ if ( ! class_exists( 'Receiptful_Email_Customer_New_Order' ) ) {
 					$img_src = wc_placeholder_img_src( 'shop_thumbnail' );
 				}
 
-				$inc_tax 		= 'incl' == $order->tax_display_cart ? true : false;
-				$product_amount = $order->get_line_subtotal( $item, $inc_tax, false ) / $item['qty'];
+				$inc_tax		= 'incl' == $order->tax_display_cart ? true : false;
+				$product_amount	= $order->get_line_subtotal( $item, $inc_tax, false ) / $item['qty'];
 
 				$items[] = array(
 					'reference'		=> $item['product_id'],
@@ -322,7 +322,7 @@ if ( ! class_exists( 'Receiptful_Email_Customer_New_Order' ) ) {
 			$tax_display	= $order->tax_display_cart;
 
 			// Subtotal
-			$subtotal 	= 0;
+			$subtotal	= 0;
 			$inc_tax	= 'incl' == $order->tax_display_cart ? true : false;
 			foreach ( $order->get_items() as $key => $item ) {
 				$subtotal += $order->get_line_subtotal( $item, $inc_tax, true );
@@ -336,8 +336,8 @@ if ( ! class_exists( 'Receiptful_Email_Customer_New_Order' ) ) {
 
 			// Shipping
 			if ( $order->order_shipping > 0 ) {
-				$shipping_total = 'excl' == $tax_display ? $order->order_shipping : ( $order->order_shipping + $order->order_shipping_tax );
-				$subtotals[] = array( 'description' => $order->get_shipping_method(), 'amount' => number_format( (float) $shipping_total, 2, '.', '' ) );
+				$shipping_total	= 'excl' == $tax_display ? $order->order_shipping : ( $order->order_shipping + $order->order_shipping_tax );
+				$subtotals[]	= array( 'description' => $order->get_shipping_method(), 'amount' => number_format( (float) $shipping_total, 2, '.', '' ) );
 			}
 
 			// Fees
@@ -383,7 +383,7 @@ if ( ! class_exists( 'Receiptful_Email_Customer_New_Order' ) ) {
 		 *
 		 * @since 1.1.0
 		 *
-		 * @param	array $items	List of items in the order, list contains data equal to $this->api_args_get_items().
+		 * @param	array	$items	List of items in the order, list contains data equal to $this->api_args_get_items().
 		 * @return	array			List of related products data.
 		 */
 		public function api_args_get_related_products( $items ) {
@@ -429,11 +429,11 @@ if ( ! class_exists( 'Receiptful_Email_Customer_New_Order' ) ) {
 		 *
 		 * @since 1.1.0
 		 *
-		 * @param	int|WC_Order	    $order				Order object or ID to get the subtotals for.
-		 * @param	array				$items				List of items to send to the API.
-		 * @param	array				$subtotals			List of subtotals to send to the API.
-		 * @param	array				$related_products	List of related products to send to the API.
-		 * @return	array									Complete list of arguments to send to the API.
+		 * @param	int|WC_Order	$order				Order object or ID to get the subtotals for.
+		 * @param	array			$items				List of items to send to the API.
+		 * @param	array			$subtotals			List of subtotals to send to the API.
+		 * @param	array			$related_products	List of related products to send to the API.
+		 * @return	array								Complete list of arguments to send to the API.
 		 */
 		public function api_args_get_order_args( $order, $items, $subtotals, $related_products ) {
 
@@ -485,9 +485,9 @@ if ( ! class_exists( 'Receiptful_Email_Customer_New_Order' ) ) {
 					'postcode'		=> $order->shipping_postcode,
 					'country'		=> $order->shipping_country,
 				),
-				'notes'				=> $order->customer_message,
-				'token'				=> $token,
-				'coupons'			=> $order->get_used_coupons(),
+				'notes'			=> $order->customer_message,
+				'token'			=> $token,
+				'coupons'		=> $order->get_used_coupons(),
 			);
 
 			// Amount notes
@@ -532,9 +532,9 @@ if ( ! class_exists( 'Receiptful_Email_Customer_New_Order' ) ) {
 				return null;
 			}
 
-			$product_id		= $item['variation_id'] > 0 ? $item['variation_id'] : $item['product_id'];
-			$product 		= wc_get_product( $product_id );
-			$order			= wc_get_order( $order_id );
+			$product_id	= $item['variation_id'] > 0 ? $item['variation_id'] : $item['product_id'];
+			$product	= wc_get_product( $product_id );
+			$order		= wc_get_order( $order_id );
 
 			// Extra check to prevent trashed (non-existing) products from executing '$product->get_item_downloads()'.
 			if ( ! $product ) {

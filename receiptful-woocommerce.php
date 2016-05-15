@@ -99,7 +99,7 @@ class Receiptful_WooCommerce {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return Receiptful_WooCommerce Instance of the class.
+	 * @return	Receiptful_WooCommerce	Instance of the class.
 	 */
 	public static function instance() {
 
@@ -252,7 +252,9 @@ class Receiptful_WooCommerce {
 	 * @deprecated 1.1.8 Automatically set in receiptful.init().
 	 */
 	public function print_scripts() {
+
 		return _deprecated_function( __METHOD__, '1.1.8' );
+
 	}
 
 
@@ -264,10 +266,12 @@ class Receiptful_WooCommerce {
 	 * @since 1.0.2
 	 * @deprecated 1.1.6 Automatically tracked now.
 	 *
-	 * @param int $order_id ID of the order being completed.
+	 * @param	int	$order_id	ID of the order being completed.
 	 */
 	public function thank_you_tracking( $order_id ) {
+
 		return _deprecated_function( __METHOD__, '1.1.6' );
+
 	}
 
 
@@ -337,11 +341,12 @@ class Receiptful_WooCommerce {
  *
  * @since 1.0.0
  *
- * @return object Receiptful_WooCommerce class object.
+ * @return	object	Receiptful_WooCommerce class object.
  */
 if ( ! function_exists( 'Receiptful' ) ) {
 
 	function Receiptful() {
+
 		return Receiptful_WooCommerce::instance();
 	}
 
