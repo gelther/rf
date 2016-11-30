@@ -252,7 +252,9 @@ class Receiptful_WooCommerce {
 	 * @deprecated 1.1.8 Automatically set in receiptful.init().
 	 */
 	public function print_scripts() {
+
 		return _deprecated_function( __METHOD__, '1.1.8' );
+
 	}
 
 
@@ -267,7 +269,9 @@ class Receiptful_WooCommerce {
 	 * @param int $order_id ID of the order being completed.
 	 */
 	public function thank_you_tracking( $order_id ) {
+
 		return _deprecated_function( __METHOD__, '1.1.6' );
+
 	}
 
 
@@ -342,8 +346,11 @@ class Receiptful_WooCommerce {
 if ( ! function_exists( 'Receiptful' ) ) {
 
 	function Receiptful() {
+
 		return Receiptful_WooCommerce::instance();
+
 	}
+
 
 }
 
